@@ -1,0 +1,6 @@
+pip
+python-dotenv
+requests
+notebook
+pandas
+pip-tools
