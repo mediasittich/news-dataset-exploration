@@ -4,3 +4,5 @@ requests
 notebook
 pandas
 pip-tools
+tweepy
+configparser
