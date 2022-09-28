@@ -208,4 +208,16 @@ cython_debug/
 #.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,python,jupyternotebooks
-
+data/raw/guardian/
+data/raw/guardian/ga_2021-10-27_2021-11-26.json
+data/raw/guardian/ga_2021-11-27_2021-12-26.json
+data/raw/guardian/ga_2021-12-27_2022-01-26.json
+data/raw/guardian/ga_2022-01-27_2022-02-26.json
+data/raw/guardian/ga_2022-02-27_2022-03-26.json
+data/raw/guardian/ga_2022-03-27_2022-04-26.json
+data/raw/guardian/ga_2022-04-27_2022-05-26.json
+data/raw/guardian/ga_2022-05-27_2022-06-26.json
+data/raw/guardian/ga_2022-06-27_2022-07-26.json
+data/raw/guardian/ga_2022-07-27_2022-08-26.json
+data/raw/guardian/ga_2022-08-27_2022-09-27.json
+data/raw/guardian/ga_2021-09-27_2021-10-26.json
