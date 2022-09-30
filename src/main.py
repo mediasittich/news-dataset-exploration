@@ -2,7 +2,6 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.getcwd(), 'src/data'))
-help('modules')
 
 import glob
 import pandas as pd
@@ -42,8 +41,7 @@ for file in nyt_files:
     nyt_df.drop(['doc_type', 'material_type', 'snippet', 'lead_paragraph'], axis=1, inplace=True)
 
     # clean up headline and abstract
-    nyt_df['headline'] = nyt_df['headline'].fillna('')
-    nyt_df['abstract'] = nyt_df['abstract'].fillna('')
+    nyt_df = nyt_df[nyt_df['headline'].notna() & nyt_df['abstract'].notna()]
     nyt_df['cl_headline'] = nyt_df.apply(lambda x: clean_txt(x['headline']), axis=1)
     nyt_df['cl_abstract'] = nyt_df.apply(lambda x: clean_txt(x['abstract']), axis=1)
     nyt_df.drop(['headline', 'abstract'], axis=1, inplace=True)
@@ -62,5 +60,19 @@ for file in nyt_files:
 
 
 #############################################################
-#                   GUARDIAN Dataset
+#                   GUARDIAN API Dataset
 #############################################################
+
+
+#############################################################
+#                   GUARDIAN Tweets Dataset
+#############################################################
+# Load dataset
+twitter_df = pd.read_csv(os.path.join(TWITTER_GU_DATA_DIR, 'gu_tweets.csv'))
+# replace NaN values with empty strings
+twitter_df = twitter_df[twitter_df['text'].notna()]
+twitter_df['clean_text'] = twitter_df.apply(lambda x: clean_txt(x['text']), axis=1)
+# save cleaned data to interim data folder
+if not os.path.exists(os.path.join(INTERIM_DIR, 'gu_twitter_data')):
+        os.mkdir(os.path.join(INTERIM_DIR, 'gu_twitter_data'))
+twitter_df.to_csv(os.path.join(INTERIM_DIR, 'gu_twitter_data/gu_tweets.csv'), index=False)
