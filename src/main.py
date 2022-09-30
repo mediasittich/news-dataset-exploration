@@ -1,9 +1,13 @@
+import sys
 import os
+
+sys.path.append(os.path.join(os.getcwd(), 'src/data'))
+help('modules')
+
 import glob
 import pandas as pd
 
-#from src.data.make_dataset import make_csv_from_csvs, make_csv_from_jsons
-from src.data.clean_text import clean_txt, calculate_word_count
+from clean_text import clean_txt, calculate_word_count
 
 DATA_DIR = os.path.join(os.getcwd(), 'data')
 RAW_DATA_DIR = os.path.join(os.getcwd(), 'data/raw')
@@ -38,6 +42,8 @@ for file in nyt_files:
     nyt_df.drop(['doc_type', 'material_type', 'snippet', 'lead_paragraph'], axis=1, inplace=True)
 
     # clean up headline and abstract
+    nyt_df['headline'] = nyt_df['headline'].fillna('')
+    nyt_df['abstract'] = nyt_df['abstract'].fillna('')
     nyt_df['cl_headline'] = nyt_df.apply(lambda x: clean_txt(x['headline']), axis=1)
     nyt_df['cl_abstract'] = nyt_df.apply(lambda x: clean_txt(x['abstract']), axis=1)
     nyt_df.drop(['headline', 'abstract'], axis=1, inplace=True)

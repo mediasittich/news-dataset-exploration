@@ -3,7 +3,7 @@ import string
 import emoji
 
 def remove_numbers(txt):
-    return re.sub(r"\d+", '', txt)
+    return re.sub(r"\d+", '', str(txt))
 
 def remove_hash(txt):
     return re.sub(r"#", '', txt)
