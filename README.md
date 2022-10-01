@@ -600,44 +600,6 @@ gu_df.head()
 
 
 
-
-```python
-gu_df['sectionId'].value_counts().nlargest(25)
-```
-
-
-
-
-    world                 8871
-    australia-news        5594
-    commentisfree         5170
-    football              5074
-    sport                 4810
-    uk-news               3934
-    us-news               3874
-    business              3800
-    politics              3263
-    environment           3119
-    lifeandstyle          2952
-    film                  2509
-    music                 2408
-    tv-and-radio          2262
-    books                 2221
-    society               2169
-    stage                 1550
-    artanddesign          1078
-    food                  1050
-    culture               1049
-    technology            1013
-    money                  970
-    global-development     844
-    media                  798
-    news                   695
-    Name: sectionId, dtype: int64
-
-
-
-
 ```python
 gu_df['sectionName'].value_counts().nlargest(25).sort_values(ascending=True).plot(kind='barh')
 plt.xlabel("Number of Articles", labelpad=14)
