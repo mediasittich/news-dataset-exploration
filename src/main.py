@@ -5,6 +5,7 @@ sys.path.append(os.path.join(os.getcwd(), 'src/data'))
 
 import glob
 import json
+import re
 import pandas as pd
 
 from clean_text import clean_txt, calculate_word_count
@@ -65,14 +66,69 @@ for file in nyt_files:
 #############################################################
 gu_files = glob.glob(os.path.join(GUARDIAN_DATA_DIR, '*.json'))
 
+
+
+# prep with first file
+# load first of the files
+f = open(gu_files[0])
+gu_first_data = json.load(f)
+f.close()
+
+gu_first_df = pd.json_normalize(gu_first_data)
+
+# create dictionary to rename columns with prefix
+colnames = {}
+
+for colname in gu_first_df.columns:
+    if colname.startswith('fields.'):
+        colnames[colname] = re.sub(r"fields.", '', colname)
+
+cols_to_drop = [
+        'isHosted', 'displayHint', 'firstPublicationDate', 'isInappropriateForSponsorship',
+        'isPremoderated', 'lastModified', 'productionOffice', 'shortUrl', 'shouldHideAdverts',
+        'showInRelatedContent', 'thumbnail', 'legallySensitive', 'isLive', 'shouldHideReaderRevenue',
+        'showAffiliateLinks', 'newspaperPageNumber', 'newspaperEditionDate', 'commentCloseDate', 'commentable', 
+        'starRating', 'liveBloggingNow', 'sensitive', 'type', 'main',
+        'webTitle', 'standfirst'
+    ]
+
+# Process al files in directory
 for file in gu_files:
     print(f"Processing file {file} ...")
     f = open(file)
-    gu_df = json.load(f)
+    gu_data = json.load(f)
     f.close()
 
-    
+    # turn json into dataframe with nested structures flattened
+    gu_df = pd.json_normalize(gu_data)
 
+    # Rename columns
+    gu_df_renamed = gu_df.rename(columns=colnames)
+
+    # select only type == articles
+    gu_articles = gu_df_renamed[gu_df_renamed['type'] == 'article']
+    gu_articles.drop(cols_to_drop, axis=1, inplace=True)
+
+    # clean up headline and abstract
+    gu_articles = gu_articles[gu_articles['headline'].notna() & gu_articles['trailText'].notna() \
+        & gu_articles['body'].notna() & gu_articles['bodyText'].notna()]
+    gu_articles['cl_headline'] = gu_articles.apply(lambda x: clean_txt(x['headline']), axis=1)
+    gu_articles['cl_trailText'] = gu_articles.apply(lambda x: clean_txt(x['trailText']), axis=1)
+    gu_articles.drop(['headline', 'trailText'], axis=1, inplace=True)
+
+    # calculate word counts for both columns
+    gu_articles['word_count_headline'] = gu_articles.apply(lambda x: calculate_word_count(x['cl_headline']), axis=1)
+    gu_articles['word_count_trailText'] = gu_articles.apply(lambda x: calculate_word_count(x['cl_trailText']), axis=1)
+
+    # export to interim folder
+    if not os.path.exists(os.path.join(INTERIM_DIR, 'gu_data')):
+        os.mkdir(os.path.join(INTERIM_DIR, 'gu_data'))
+    # create filename from input file name
+    file_name = os.path.splitext(os.path.basename(file))[0]
+    # save to subdir in interim data folder 
+    gu_articles.to_csv(os.path.join(INTERIM_DIR, f"gu_data/{file_name}.csv"), index=False)
+
+    
 #############################################################
 #                   GUARDIAN Tweets Dataset
 #############################################################
