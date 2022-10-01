@@ -15,10 +15,8 @@ Althogh I won't be using their data for my research project, the available data 
 ├── README.md
 ├── config.ini
 ├── data
-│   └── raw
-│       ├── gu_twitter
-│       ├── guardian
-│       └── nyt_headlines
+│   ├── raw
+│   └── interim
 ├── notebooks
 │   ├── 01_nyt_apis.ipynb
 │   ├── 02_guardian_api.ipynb
@@ -30,10 +28,21 @@ Althogh I won't be using their data for my research project, the available data 
     ├── __init__.py
     ├── data
     │   ├── __init__.py
-    │   └── clean_text.py
+    │   ├── clean_text.py
     │   └── make_dataset.py
     └── main.py
 ```
+
+## Datasets
+
+**NYT Dataset:**  
+The dataset contains partial article data from the NYT Archive API from 10/2021 to 09/2022, approx. 34,700 items.
+
+**GU Dataset:**  
+The dataset contains article data from the GU Search API from 27/09/2021 to 27/09/2022, approx. 75,000 items.
+
+**GU Tweets Dataset:**  
+The dataset contains tweets from The Guardian main account ([@guardian](https://twitter.com/guardian)), with 3,200 items (maximum allowed number of tweets from a user as per Twitter API limitations).
 
 
 ```python
@@ -58,6 +67,7 @@ gu_twitter_path = 'data/interim/gu_twitter_data/gu_tweets.csv'
 
 
 ```python
+# Load NYT data files and combine them
 nyt_files = glob.glob(os.path.join(nyt_path, '*.csv'))
 nyt_lst = []
 
@@ -70,6 +80,7 @@ nyt_df = pd.concat(nyt_lst)
 
 
 ```python
+# Load GU data files and combine them
 gu_files = glob.glob(os.path.join(gu_path, '*.csv'))
 gu_lst = []
 
@@ -82,16 +93,15 @@ gu_df = pd.concat(gu_lst)
 
 
 ```python
+# Load GU Twitter data
 twitter_df = pd.read_csv(gu_twitter_path)
 ```
 
+### The New York Times
 
 ```python
 nyt_df.describe()
 ```
-
-
-
 
 <div>
 <table border="1" class="dataframe">
@@ -156,9 +166,6 @@ nyt_df.describe()
 </table>
 </div>
 
-
-
-
 ```python
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, sharey=True, figsize=(12,5))
 fig.suptitle('Word counts for NYT articles')
@@ -177,18 +184,17 @@ for ax in (ax1, ax2, ax3):
 plt.show()
 ```
 
-
     
-![png](README_files/README_10_0.png)
+![png](README_files/README_13_0.png)
     
 
+
+### Tha Guardian
 
 
 ```python
 gu_df.describe()
 ```
-
-
 
 
 <div>
@@ -264,8 +270,6 @@ gu_df.describe()
 </div>
 
 
-
-
 ```python
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, sharey=True, figsize=(12,5))
 fig.suptitle('Word counts for GUARDIAN articles')
@@ -283,20 +287,17 @@ for ax in (ax1, ax2, ax3):
 
 plt.show()
 ```
-
-
     
-![png](README_files/README_12_0.png)
+![png](README_files/README_16_0.png)
     
 
+
+### Tweets from The Guardian
 
 
 ```python
 twitter_df.head()
 ```
-
-
-
 
 <div>
 <table border="1" class="dataframe">
@@ -363,8 +364,6 @@ twitter_df.describe()
 ```
 
 
-
-
 <div>
 <table border="1" class="dataframe">
   <thead>
@@ -420,8 +419,6 @@ twitter_df.describe()
 </div>
 
 
-
-
 ```python
 plt.hist(twitter_df['word_count'], bins=25)
 plt.xlabel('Word count')
@@ -430,19 +427,14 @@ plt.title('Histogram of Word Counts in GUARDIAN Tweets')
 plt.show()
 ```
 
-
     
-![png](README_files/README_15_0.png)
+![png](README_files/README_20_0.png)
     
-
 
 
 ```python
 gu_df.head()
 ```
-
-
-
 
 <div>
 <table border="1" class="dataframe">
@@ -598,7 +590,10 @@ gu_df.head()
 <p>5 rows × 22 columns</p>
 </div>
 
+The NYT has more longer articles than the GU. The headlines show the opposite behaviour. The abstracts seem similar in both.  
+Compared to the length of tweets, the most similar article part in length is the headline.
 
+## Articles per Category/Section in The Guardian
 
 ```python
 gu_df['sectionName'].value_counts().nlargest(25).sort_values(ascending=True).plot(kind='barh')
@@ -607,9 +602,5 @@ plt.ylabel("Section", labelpad=14)
 plt.title("Number of Articles per Section in GUARDIAN (top 25 Sections)")
 plt.show()
 ```
-
-
     
-![png](README_files/README_18_0.png)
-    
-
+![png](README_files/README_24_0.png)
