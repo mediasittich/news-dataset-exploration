@@ -8,3 +8,4 @@ tweepy
 configparser
 matplotlib
 emoji
+w3lib
