@@ -435,3 +435,219 @@ plt.show()
 ![png](README_files/README_15_0.png)
     
 
+
+
+```python
+gu_df.head()
+```
+
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>sectionId</th>
+      <th>sectionName</th>
+      <th>webPublicationDate</th>
+      <th>webUrl</th>
+      <th>apiUrl</th>
+      <th>pillarId</th>
+      <th>pillarName</th>
+      <th>byline</th>
+      <th>body</th>
+      <th>...</th>
+      <th>lang</th>
+      <th>bodyText</th>
+      <th>charCount</th>
+      <th>bylineHtml</th>
+      <th>fields.contributorBio</th>
+      <th>scheduledPublicationDate</th>
+      <th>cl_headline</th>
+      <th>cl_trailText</th>
+      <th>word_count_headline</th>
+      <th>word_count_trailText</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>sport/blog/2022/jun/27/imperious-nsw-seize-adv...</td>
+      <td>sport</td>
+      <td>Sport</td>
+      <td>2022-06-26T23:46:44Z</td>
+      <td>https://www.theguardian.com/sport/blog/2022/ju...</td>
+      <td>https://content.guardianapis.com/sport/blog/20...</td>
+      <td>pillar/sport</td>
+      <td>Sport</td>
+      <td>Nick Tedeschi</td>
+      <td>&lt;p&gt;A star was born in debutant Matt Burton. An...</td>
+      <td>...</td>
+      <td>en</td>
+      <td>A star was born in debutant Matt Burton. An al...</td>
+      <td>4835</td>
+      <td>&lt;a href="profile/nick-tedeschi"&gt;Nick Tedeschi&lt;/a&gt;</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Imperious NSW seize advantage after Queensland...</td>
+      <td>Poor tackling basic handling errors and a lack...</td>
+      <td>10</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>music/2022/jun/27/kendrick-lamar-at-glastonbur...</td>
+      <td>music</td>
+      <td>Music</td>
+      <td>2022-06-26T23:32:10Z</td>
+      <td>https://www.theguardian.com/music/2022/jun/27/...</td>
+      <td>https://content.guardianapis.com/music/2022/ju...</td>
+      <td>pillar/arts</td>
+      <td>Arts</td>
+      <td>Alexis Petridis</td>
+      <td>&lt;p&gt;As Glastonbury 2022 draws to a close, a var...</td>
+      <td>...</td>
+      <td>en</td>
+      <td>As Glastonbury 2022 draws to a close, a variat...</td>
+      <td>3510</td>
+      <td>&lt;a href="profile/alexispetridis"&gt;Alexis Petrid...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Kendrick Lamar at Glastonbury review – faith f...</td>
+      <td>Sporting a bejewelled crown of thorns and with...</td>
+      <td>11</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>world/2022/jun/27/garbage-island-no-more-how-o...</td>
+      <td>world</td>
+      <td>World news</td>
+      <td>2022-06-26T23:06:58Z</td>
+      <td>https://www.theguardian.com/world/2022/jun/27/...</td>
+      <td>https://content.guardianapis.com/world/2022/ju...</td>
+      <td>pillar/news</td>
+      <td>News</td>
+      <td>Justin McCurry on Teshima island</td>
+      <td>&lt;p&gt;Toru Ishii remembers when the shredded car ...</td>
+      <td>...</td>
+      <td>en</td>
+      <td>Toru Ishii remembers when the shredded car tyr...</td>
+      <td>6047</td>
+      <td>&lt;a href="profile/justinmccurry"&gt;Justin McCurry...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Garbage island no more how one Japanese commun...</td>
+      <td>Teshima – site of Japan’s worst case of illega...</td>
+      <td>14</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>education/2022/jun/27/university-college-londo...</td>
+      <td>education</td>
+      <td>Education</td>
+      <td>2022-06-26T23:01:00Z</td>
+      <td>https://www.theguardian.com/education/2022/jun...</td>
+      <td>https://content.guardianapis.com/education/202...</td>
+      <td>pillar/news</td>
+      <td>News</td>
+      <td>Richard Adams Education editor</td>
+      <td>&lt;p&gt;University College London has boasted its f...</td>
+      <td>...</td>
+      <td>en</td>
+      <td>University College London has boasted its fina...</td>
+      <td>4009</td>
+      <td>&lt;a href="profile/richardadams"&gt;Richard Adams&lt;/...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>University College London generates £bn a year...</td>
+      <td>UCL’s research knowledge and support for busin...</td>
+      <td>11</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>media/2022/jun/27/young-people-must-report-har...</td>
+      <td>media</td>
+      <td>Media</td>
+      <td>2022-06-26T23:01:00Z</td>
+      <td>https://www.theguardian.com/media/2022/jun/27/...</td>
+      <td>https://content.guardianapis.com/media/2022/ju...</td>
+      <td>pillar/news</td>
+      <td>News</td>
+      <td>Dan Milmo</td>
+      <td>&lt;p&gt;Young people should report harmful online c...</td>
+      <td>...</td>
+      <td>en</td>
+      <td>Young people should report harmful online cont...</td>
+      <td>2745</td>
+      <td>&lt;a href="profile/danmilmo"&gt;Dan Milmo&lt;/a&gt;</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Young people must report harmful online conten...</td>
+      <td>Ofcom says of to yearolds have seen harmful co...</td>
+      <td>10</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 22 columns</p>
+</div>
+
+
+
+
+```python
+gu_df['sectionId'].value_counts().nlargest(25)
+```
+
+
+
+
+    world                 8871
+    australia-news        5594
+    commentisfree         5170
+    football              5074
+    sport                 4810
+    uk-news               3934
+    us-news               3874
+    business              3800
+    politics              3263
+    environment           3119
+    lifeandstyle          2952
+    film                  2509
+    music                 2408
+    tv-and-radio          2262
+    books                 2221
+    society               2169
+    stage                 1550
+    artanddesign          1078
+    food                  1050
+    culture               1049
+    technology            1013
+    money                  970
+    global-development     844
+    media                  798
+    news                   695
+    Name: sectionId, dtype: int64
+
+
+
+
+```python
+gu_df['sectionName'].value_counts().nlargest(25).sort_values(ascending=True).plot(kind='barh')
+plt.xlabel("Number of Articles", labelpad=14)
+plt.ylabel("Section", labelpad=14)
+plt.title("Number of Articles per Section in GUARDIAN (top 25 Sections)")
+plt.show()
+```
+
+
+    
+![png](README_files/README_18_0.png)
+    
+
