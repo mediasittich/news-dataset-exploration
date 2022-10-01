@@ -4,6 +4,7 @@ import os
 sys.path.append(os.path.join(os.getcwd(), 'src/data'))
 
 import glob
+import json
 import pandas as pd
 
 from clean_text import clean_txt, calculate_word_count
@@ -62,7 +63,15 @@ for file in nyt_files:
 #############################################################
 #                   GUARDIAN API Dataset
 #############################################################
+gu_files = glob.glob(os.path.join(GUARDIAN_DATA_DIR, '*.json'))
 
+for file in gu_files:
+    print(f"Processing file {file} ...")
+    f = open(file)
+    gu_df = json.load(f)
+    f.close()
+
+    
 
 #############################################################
 #                   GUARDIAN Tweets Dataset
