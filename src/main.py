@@ -137,6 +137,9 @@ twitter_df = pd.read_csv(os.path.join(TWITTER_GU_DATA_DIR, 'gu_tweets.csv'))
 # replace NaN values with empty strings
 twitter_df = twitter_df[twitter_df['text'].notna()]
 twitter_df['clean_text'] = twitter_df.apply(lambda x: clean_txt(x['text']), axis=1)
+# calculate word counts for both columns
+twitter_df['word_count'] = twitter_df.apply(lambda x: calculate_word_count(x['clean_text']), axis=1)
+
 # save cleaned data to interim data folder
 if not os.path.exists(os.path.join(INTERIM_DIR, 'gu_twitter_data')):
         os.mkdir(os.path.join(INTERIM_DIR, 'gu_twitter_data'))
