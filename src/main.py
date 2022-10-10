@@ -3,13 +3,31 @@ import os
 
 sys.path.append(os.path.join(os.getcwd(), 'src/data'))
 
+# Load secret key from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
 import glob
 import json
 import re
+
+# Accessing API
+import requests
+
+# Datetime utilities
+import time
+from datetime import date, timedelta
+import dateutil
+from dateutil.relativedelta import relativedelta
+
+# Dataset exploration
 import pandas as pd
 
+# Custom module functions
 from clean_text import clean_txt, calculate_word_count
 
+# Define constants
+# Directories
 DATA_DIR = os.path.join(os.getcwd(), 'data')
 RAW_DATA_DIR = os.path.join(os.getcwd(), 'data/raw')
 
@@ -24,6 +42,83 @@ INTERIM_DIR = os.path.join(DATA_DIR, 'interim')
 if not os.path.exists(os.path.join(DATA_DIR, 'processed')):
     os.mkdir(os.path.join(DATA_DIR, 'processed'))
 PROCESSED_DIR = os.path.join(DATA_DIR, 'processed')
+
+# API access
+GUARDIAN_API_KEY=os.environ.get('GUARDIAN_API_KEY')
+GUARDIAN_API_ENDPOINT = 'https://content.guardianapis.com/search?'
+
+#################### CREATE DATASETS ####################
+
+#############################################################
+#                   GUARDIAN API Dataset
+#############################################################
+
+# Date ranges to get articles form
+def create_date_ranges(start_date, end_date):
+    num_of_months = (end_date.year - start_date.year) * 12 +  (end_date.month - start_date.month)
+    print(f"Number of months: {num_of_months}")
+    date_ranges = []
+    for month in range(1, num_of_months):
+        new_end_date = start_date + relativedelta(months=1) - timedelta(days=1)
+        date_ranges.append((start_date.strftime('%Y-%m-%d'), new_end_date.strftime('%Y-%m-%d')))
+        start_date = start_date + relativedelta(months=1)
+    last_month_start = new_end_date + relativedelta(days=1)
+    last_month_end = end_date
+    date_ranges.append((last_month_start.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')))
+    print(f"Last months in date range: {last_month_start}, {last_month_end}")
+    return date_ranges
+
+# Set start and end date
+start_date = date(2021, 9, 27)
+end_date = date(2022, 9, 27)
+# Create date ranges
+date_ranges = create_date_ranges(start_date=start_date, end_date=end_date)
+
+params = {
+        'from-date': '',
+        'to-date': '',
+        'show-fields': 'all',
+        'show-tags': 'all',
+        'page-size': '50',
+        'api-key': GUARDIAN_API_KEY
+    }
+
+# Get articles for dates within date ranges
+for dates in date_ranges:
+    # set date parameters for request    
+    params['from-date'] = dates[0]
+    params['to-date'] = dates[1]
+    # create filename with current date range
+    file_name = os.path.join(GUARDIAN_DATA_DIR, f"ga_{params['from-date']}_{params['to-date']}.json")
+    # ensure that filename doesn't exist already
+    if not os.path.exists(file_name):
+        print(f"Downloading {dates}")
+        all_results = []
+        current_page = 1
+        total_pages = 1
+
+        while current_page <= total_pages:
+            print(f"...page {current_page}")
+            # update current page parameter
+            params['page'] = current_page
+            # get number of total pages from response and update parameters
+            res = requests.get(GUARDIAN_API_ENDPOINT, params)
+            data = res.json()['response']
+            total_pages = data['pages']
+            print('Total items in date range: ',data['total'])
+
+            # get results and add them to results list
+            all_results.extend(data['results'])
+            # update page counter!
+            current_page += 1
+
+        # export results to file
+        with open(file_name, 'w') as f:
+            print(f"Writing to ... {file_name}")
+            f.write(json.dumps(all_results, indent=2))
+
+
+#################### DATASETS COMPARISON ####################
 
 #############################################################
 #                   NYT Dataset
@@ -65,8 +160,6 @@ for file in nyt_files:
 #                   GUARDIAN API Dataset
 #############################################################
 gu_files = glob.glob(os.path.join(GUARDIAN_DATA_DIR, '*.json'))
-
-
 
 # prep with first file
 # load first of the files
