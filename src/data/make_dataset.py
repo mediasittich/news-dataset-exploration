@@ -1,8 +1,8 @@
+# Navigate file system
 import os
 import glob
 
-#def test():
-#    print('Make a dataset')
+####### Helper functions to combine files #######
 
 # Combine csv files from a directory to one file
 def make_csv_from_csvs(dir):
