@@ -118,7 +118,7 @@ for dates in date_ranges:
             f.write(json.dumps(all_results, indent=2))
 
 
-#################### DATASETS COMPARISON ####################
+#################### DATASETS PREPROCESSING & COMPARISON ####################
 
 #############################################################
 #                   NYT Dataset
@@ -182,7 +182,7 @@ cols_to_drop = [
         'showInRelatedContent', 'thumbnail', 'legallySensitive', 'isLive', 'shouldHideReaderRevenue',
         'showAffiliateLinks', 'newspaperPageNumber', 'newspaperEditionDate', 'commentCloseDate', 'commentable', 
         'starRating', 'liveBloggingNow', 'sensitive', 'type', 'main',
-        'webTitle', 'standfirst'
+        'webTitle', 'standfirst', 'tags'
     ]
 
 # Process al files in directory
@@ -197,6 +197,11 @@ for file in gu_files:
 
     # Rename columns
     gu_df_renamed = gu_df.rename(columns=colnames)
+
+    # create tags-related columns
+    gu_df_renamed['tag_ids'] = gu_df_renamed['tags'].apply(lambda x: [tag['id'] for tag in x if 'id' in tag])
+    gu_df_renamed['tag_webTitles'] = gu_df_renamed['tags'].apply(lambda x: [tag['webTitle'] for tag in x if 'webTitle' in tag])
+    gu_df_renamed['tag_webUrls'] = gu_df_renamed['tags'].apply(lambda x: [tag['webUrl'] for tag in x if 'webUrl' in tag])
 
     # select only type == articles
     gu_articles = gu_df_renamed[gu_df_renamed['type'] == 'article']
