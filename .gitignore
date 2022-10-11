@@ -226,4 +226,4 @@ config.ini
 data/raw/gu_twitter/
 data/interim/
 data/processed/
-README.ipynb
+# README.ipynb
