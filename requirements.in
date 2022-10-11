@@ -9,3 +9,4 @@ configparser
 matplotlib
 emoji
 w3lib
+seaborn
