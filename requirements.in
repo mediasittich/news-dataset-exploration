@@ -10,3 +10,4 @@ matplotlib
 emoji
 w3lib
 seaborn
+scikit-learn
